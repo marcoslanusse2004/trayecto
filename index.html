@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trayecto</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="cabecera">
+    <div class="marca">
+      <span class="sello" aria-hidden="true">Tr</span>
+      <div class="marca-txt">
+        <h1>Trayecto</h1>
+        <p id="linea-nivel">Ingresante</p>
+      </div>
+    </div>
+
+    <div class="marcadores">
+      <div class="marcador-dato">
+        <span class="micro">Puntos</span>
+        <b class="marcador" id="puntos">0</b>
+      </div>
+      <div class="marcador-dato">
+        <span class="micro">Racha</span>
+        <b id="racha">1</b>
+        <span class="micro" id="racha-txt">día</span>
+      </div>
+    </div>
+
+    <div class="nivel-barra">
+      <div class="barra"><span id="barra-nivel"></span></div>
+      <p class="micro" id="nivel-falta"></p>
+    </div>
+  </header>
+
+  <!-- ============ OPORTUNIDADES ============ -->
+  <section class="vista" id="vista-oportunidades" aria-label="Oportunidades">
+    <div class="buscador">
+      <input type="search" id="f-texto" placeholder="Puesto, empresa o skill" autocomplete="off" aria-label="Buscar">
+      <div class="chips-scroll" id="chips-area"></div>
+      <div class="linea-filtros">
+        <label class="check"><input type="checkbox" id="f-match"><span>Solo match alto</span></label>
+        <label class="check"><input type="checkbox" id="f-horas"><span>Entra en mis horas</span></label>
+        <button class="btn btn-fantasma btn-chico" type="button" data-accion="limpiar-filtros">Limpiar</button>
+      </div>
+    </div>
+
+    <p class="conteo" id="conteo"></p>
+    <div class="lista" id="lista-oportunidades"></div>
+  </section>
+
+  <!-- ============ MI TRAYECTO ============ -->
+  <section class="vista" id="vista-trayecto" aria-label="Mi trayecto" hidden>
+
+    <article class="paso-siguiente" id="paso-siguiente"></article>
+
+    <article class="tarjeta" id="tarjeta-nivel">
+      <div class="tarjeta-cab">
+        <h2>Tu nivel</h2>
+        <span class="dato-xl" id="nivel-nombre">Ingresante</span>
+      </div>
+      <div class="escalera" id="escalera"></div>
+      <p class="sub" id="nivel-detalle"></p>
+    </article>
+
+    <article class="tarjeta">
+      <div class="tarjeta-cab">
+        <h2>Misiones de la semana</h2>
+        <span class="contador-mision" id="misiones-contador"></span>
+      </div>
+      <p class="sub">Se marcan solas cuando las hacés. Son las acciones que más te mueven el match.</p>
+      <ul class="misiones" id="misiones"></ul>
+    </article>
+
+    <article class="tarjeta">
+      <h2>Lo que te falta para las búsquedas que querés</h2>
+      <p class="sub">Skills que piden los avisos con mejor match y que todavía no tenés cargadas.</p>
+      <div class="brechas" id="brechas"></div>
+    </article>
+
+    <article class="tarjeta">
+      <div class="tarjeta-cab">
+        <h2>Objetivos</h2>
+        <button class="btn btn-fantasma btn-chico" type="button" data-accion="nuevo-objetivo">Crear objetivo</button>
+      </div>
+      <form class="alta" id="alta-objetivo" hidden>
+        <input type="text" id="objetivo-titulo" placeholder="ej. Aprender SQL para análisis" maxlength="70" aria-label="Título del objetivo">
+        <div class="alta-acciones">
+          <button class="btn btn-lleno btn-chico" type="submit">Agregar</button>
+          <button class="btn btn-fantasma btn-chico" type="button" data-accion="cancelar-objetivo">Cancelar</button>
+        </div>
+      </form>
+      <div class="objetivos" id="objetivos"></div>
+    </article>
+  </section>
+
+  <!-- ============ POSTULACIONES ============ -->
+  <section class="vista" id="vista-postulaciones" aria-label="Postulaciones" hidden>
+    <p class="sub sub-tope">Movés cada búsqueda de etapa a medida que avanza. Llegar a entrevista suma puntos.</p>
+    <div class="tablero" id="tablero"></div>
+  </section>
+
+  <!-- ============ MI PERFIL ============ -->
+  <section class="vista" id="vista-perfil" aria-label="Mi perfil" hidden>
+    <p class="nota">Perfil cargado con datos de ejemplo para que veas el match funcionando. Editalo y se recalcula todo al instante.</p>
+
+    <form class="tarjeta" id="form-perfil" autocomplete="off">
+      <h2>Cursada</h2>
+      <div class="grilla">
+        <label class="campo"><span class="micro">Nombre</span><input type="text" id="p-nombre" maxlength="40"></label>
+        <label class="campo"><span class="micro">Universidad</span><input type="text" id="p-universidad" maxlength="50"></label>
+        <label class="campo"><span class="micro">Carrera</span><input type="text" id="p-carrera" maxlength="50"></label>
+        <label class="campo"><span class="micro">Año de cursada</span>
+          <select id="p-anio">
+            <option value="1">1.º año</option>
+            <option value="2">2.º año</option>
+            <option value="3">3.º año</option>
+            <option value="4">4.º año</option>
+            <option value="5">5.º año o más</option>
+          </select>
+        </label>
+        <label class="campo"><span class="micro">Materias aprobadas (%)</span><input type="number" id="p-avance" min="0" max="100" step="5"></label>
+        <label class="campo"><span class="micro">Horas semanales</span><input type="number" id="p-horas" min="4" max="40" step="2"></label>
+        <label class="campo"><span class="micro">Modalidad preferida</span>
+          <select id="p-modalidad">
+            <option value="Indistinto">Indistinto</option>
+            <option value="Remoto">Remoto</option>
+            <option value="Híbrido">Híbrido</option>
+            <option value="Presencial">Presencial</option>
+          </select>
+        </label>
+        <label class="campo"><span class="micro">Ciudad</span><input type="text" id="p-ciudad" maxlength="40"></label>
+      </div>
+      <label class="campo"><span class="micro">Tu presentación</span>
+        <textarea id="p-bio" rows="3" maxlength="320" placeholder="Qué estudiás, qué hiciste y qué buscás. Tres líneas alcanzan."></textarea>
+      </label>
+      <label class="campo"><span class="micro">CV o portfolio (opcional)</span>
+        <input type="text" id="p-cv" maxlength="120" placeholder="Pegá un link, o dejalo vacío: el perfil funciona igual">
+      </label>
+    </form>
+
+    <article class="tarjeta">
+      <h2>Áreas que te interesan</h2>
+      <p class="sub">Pesan 25 puntos del match.</p>
+      <div class="chips" id="areas-perfil"></div>
+    </article>
+
+    <article class="tarjeta">
+      <h2>Tus skills</h2>
+      <p class="sub">Pesan 55 puntos del match. Cada una suma 6 puntos a tu nivel.</p>
+      <form class="alta" id="alta-skill">
+        <input type="text" id="skill-nueva" placeholder="ej. SQL, Figma, Redacción jurídica" maxlength="28" aria-label="Nueva skill">
+        <button class="btn btn-lleno btn-chico" type="submit">Agregar</button>
+      </form>
+      <div class="chips" id="skills-perfil"></div>
+    </article>
+
+    <article class="tarjeta">
+      <h2>Proyectos y evidencia</h2>
+      <p class="sub">Lo que reemplaza al CV vacío: TPs, freelance, voluntariado. Cada uno suma 12 puntos.</p>
+      <form class="alta" id="alta-proyecto">
+        <input type="text" id="proyecto-nuevo" placeholder="ej. Dashboard de ventas en Power BI (TP grupal)" maxlength="70" aria-label="Nuevo proyecto">
+        <button class="btn btn-lleno btn-chico" type="submit">Agregar</button>
+      </form>
+      <ul class="proyectos" id="proyectos"></ul>
+    </article>
+
+    <article class="tarjeta">
+      <h2>Borrar mis datos</h2>
+      <p class="sub">Elimina perfil, postulaciones, objetivos y puntos de este navegador.</p>
+      <div id="zona-reset"></div>
+    </article>
+  </section>
+
+  <footer class="pie">
+    <p>Prototipo. Empresas y avisos ficticios. Las condiciones siguen el régimen de pasantías educativas (Ley 26.427): hasta 20 hs semanales, convenio con la universidad y asignación estímulo.</p>
+  </footer>
+</div>
+
+<nav class="nav" aria-label="Secciones">
+  <button class="nav-btn" data-vista="oportunidades" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><line x1="16" y1="16" x2="21" y2="21"></line></svg>
+    <span>Buscar</span>
+  </button>
+  <button class="nav-btn" data-vista="trayecto" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20 L9 9 L14 15 L20 4"></path><circle cx="20" cy="4" r="1.6"></circle></svg>
+    <span>Trayecto</span>
+  </button>
+  <button class="nav-btn" data-vista="postulaciones" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6" width="17" height="14" rx="2"></rect><path d="M9 6V4.5h6V6"></path><line x1="3.5" y1="11" x2="20.5" y2="11"></line></svg>
+    <span>Postulaciones</span>
+    <i class="punto" id="punto-post" hidden></i>
+  </button>
+  <button class="nav-btn" data-vista="perfil" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"></circle><path d="M4.8 20c.9-3.6 3.7-5.5 7.2-5.5s6.3 1.9 7.2 5.5"></path></svg>
+    <span>Perfil</span>
+  </button>
+</nav>
+
+<div class="avisos" id="avisos" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
